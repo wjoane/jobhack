@@ -15,7 +15,7 @@ class SeleniumScrapper(BasicScrapper):
         self.__driver = chrome_config['driver']
         self.__options = webdriver.ChromeOptions()
         self.__options.binary_location = chrome_config['bin']
-        self.__options.headless = False
+        self.__options.headless = headless
         self.__options.add_argument("--window-size=1920,1200")
         self.__options.add_argument("--disable-dev-shm-usage")
         self.__options.add_argument("--no-sandbox")
@@ -33,7 +33,7 @@ class SeleniumScrapper(BasicScrapper):
     def start_browsing(
             self, home_url, item_selector, link_selector,
             description_selector=None, max_pages=1, start_page=1,
-            relative_links=False, sleepy=True):
+            relative_links=False, lang=None, sleepy=True):
         domain = re.search('https?://([A-Za-z_0-9.-]+).*', home_url).group(1)
         logging.info('Crawling through ' + domain)
         progress = start_page
@@ -72,7 +72,7 @@ class SeleniumScrapper(BasicScrapper):
                 if random() > 0.5:
                     page_text = self.parse_page_content(
                         ('https://' + domain if relative_links else '') + link,
-                        description_selector)
+                        description_selector, lang)
                     if sleepy:
                         sleep(randint(10, 50) / 10)
                     if page_text:
@@ -87,7 +87,8 @@ class SeleniumScrapper(BasicScrapper):
 
         logging.info('Scrapping completed ' + domain)
 
-    def parse_page_content(self, page_url, description_selector=None):
+    def parse_page_content(self, page_url, description_selector=None,
+                           lang=None):
         logging.debug('Parsing ' + page_url)
         try:
             driver = webdriver.Chrome(
@@ -132,6 +133,6 @@ class SeleniumScrapper(BasicScrapper):
         return {
             'url': page_url,
             'selector': description_selector,
-            'code': self._detect_response_error(text),
+            'code': self._detect_response_error(text, lang),
             'content': text
         }

@@ -3,7 +3,6 @@ import logging
 
 from src.engine.jobhack_engine import JobhackEngine
 
-
 config = configparser.ConfigParser()
 config.read('config.ini')
 
@@ -19,8 +18,9 @@ logging.basicConfig(
 
 engine = JobhackEngine(config, random_ua=False)
 
-unlabeled_data = engine.scrap_site()
-# labeled_data = engine.auto_label_data(unlabeled_data)
+# unlabeled_data = engine.scrap_site()
+# unlabeled_data = engine.retry_failed_pages()
+labeled_data = engine.auto_label_data()
 # model = engine.train_prediction_model(labeled_data)
 
 # url = input("Enter the URL of the page to score: ")

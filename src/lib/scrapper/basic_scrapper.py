@@ -31,7 +31,7 @@ class BasicScrapper:
     def start_browsing(
             self, home_url, item_selector, link_selector,
             description_selector=None, max_pages=1, start_page=1,
-            relative_links=False):
+            relative_links=False, lang=None):
         domain = re.search('https?://([A-Za-z_0-9.-]+).*', home_url).group(1)
         logging.info('Crawling through ' + domain)
         progress = start_page
@@ -58,7 +58,7 @@ class BasicScrapper:
             for link in links:
                 page_text = self.parse_page_content(
                     ('https://' + domain if relative_links else '') + link,
-                    description_selector)
+                    description_selector, lang)
                 if page_text:
                     yield page_text
 
@@ -68,7 +68,8 @@ class BasicScrapper:
 
         logging.info('Scrapping completed ' + domain)
 
-    def parse_page_content(self, page_url, description_selector=None):
+    def parse_page_content(
+            self, page_url, description_selector=None, lang=None):
         logging.debug('Parsing page: ' + page_url)
         try:
             req = self.__session.get(page_url)
@@ -112,7 +113,7 @@ class BasicScrapper:
         return {
             'url': page_url,
             'selector': description_selector,
-            'code': self._detect_response_error(text),
+            'code': self._detect_response_error(text, lang),
             'content': text
         }
 

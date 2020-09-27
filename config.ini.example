@@ -1,20 +1,30 @@
 [DATABASE]
-type = mysql
-host = localhost
-user = jobhack
+type     = mysql
+host     = localhost
+user     = jobhack
 password = **some**PW**
 database = jobhack
 
-[BROWSER]
-basic_mode = yes
-site_url = https://www.tanitjobs.com/jobs/?page=<#>
-item_selector = article.listing-item__jobs
-link_selector = div.listing-item__title a
+[WEBSITE]
+site_url             = https://www.tanitjobs.com/jobs/?page=<#>
+basic_mode           = yes
+relative_links       = no
+start_page           = 1
+max_pages            = 173
+language             = fr
+item_selector        = article.listing-item__jobs
+link_selector        = div.listing-item__title a
 description_selector = div.detail-offre
-max_pages = 100
 
 [CHROME]
-bin = /usr/bin/google-chrome
-driver = driver/chromedriver
+bin     = /usr/bin/google-chrome
+driver  = driver/chromedriver
 profile = driver/profile
 
+[LABELER]
+positive_keywords  = developpeur,informatique,java,python,php,machine learning,intelligence artificielle,data science,medical
+negative_keywords  = anxiete,charge,colere,depression,faire preuve de,horaire fixe,obligatoire,sous pression,stress,surcharge,temps plein,temps supplementaire,un minimum de
+negative_weight    = 1.5
+bonus_for_hits     = 4
+max_l_divider      = 5
+min_l_fuzzy        = 5
