@@ -1,5 +1,6 @@
-server_up.sh
-setup.sh
-ubuntu-bionic-18.04-cloudimg-console.log
-Vagrantfile
-.vagrant
+__pycache__/
+/.idea/
+/venv/
+/jobhack.log
+/config.ini
+/driver/profile/

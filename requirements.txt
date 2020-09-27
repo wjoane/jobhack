@@ -1,0 +1,13 @@
+bs4
+fake_useragent
+fuzzysearch
+gunicorn
+langdetect
+matplotlib
+mysql-connector-python
+nltk
+pandas
+requests
+selenium
+sklearn
+unidecode

@@ -1,0 +1,20 @@
+[DATABASE]
+type = mysql
+host = localhost
+user = jobhack
+password = **some**PW**
+database = jobhack
+
+[BROWSER]
+basic_mode = yes
+site_url = https://www.tanitjobs.com/jobs/?page=<#>
+item_selector = article.listing-item__jobs
+link_selector = div.listing-item__title a
+description_selector =
+max_pages = 100
+
+[CHROME]
+bin = /usr/bin/google-chrome
+driver = driver/chromedriver
+profile = driver/profile
+
