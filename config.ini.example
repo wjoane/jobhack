@@ -10,7 +10,7 @@ basic_mode = yes
 site_url = https://www.tanitjobs.com/jobs/?page=<#>
 item_selector = article.listing-item__jobs
 link_selector = div.listing-item__title a
-description_selector =
+description_selector = div.detail-offre
 max_pages = 100
 
 [CHROME]
