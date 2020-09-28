@@ -18,6 +18,21 @@ class MysqlUtil:
                           db_config['host'])
             logging.error(str(e))
 
+    def __len__(self):
+        logging.info('Loading data from database...')
+        mycursor = self.__mydb.cursor(dictionary=True)
+        try:
+            sql = "SELECT COUNT(*) AS size FROM `descriptions`;"
+            mycursor.execute(sql)
+            row = mycursor.fetchone()
+            return row['size']
+        except Exception as e:
+            logging.error("Unable to execute SELECT SQL commands")
+            logging.error(str(e))
+            return 0
+        finally:
+            mycursor.close()
+
     def save(self, content, truncate=False):
         mycursor = self.__mydb.cursor()
 
@@ -50,7 +65,7 @@ class MysqlUtil:
         logging.info('Loading data from database...')
         mycursor = self.__mydb.cursor(dictionary=True, buffered=True)
         try:
-            sql = "SELECT * FROM `descriptions`;"
+            sql = "SELECT * FROM `descriptions` ORDER BY `label`;"
             mycursor.execute(sql)
             row = mycursor.fetchone()
             while row:

@@ -27,6 +27,7 @@ class JobhackEngine:
             self.__scrapper = SeleniumScrapper(self.__config['CHROME'],
                                                random_ua=random_ua)
         self.__data_set = None
+        self.__model = None
         if self.__config['DATABASE']['type'] == 'mysql':
             self.__db = MysqlUtil(self.__config['DATABASE'])
 
@@ -90,3 +91,22 @@ class JobhackEngine:
             self.__db.update_labels(self.__data_set)
 
         return self.__data_set
+
+    def train_prediction_model(self, labeled_data=None):
+        data_set = labeled_data
+        if not data_set:
+            data_set = self.__data_set
+        if not data_set and self.__db:
+            data_set = list(self.__db.load)
+
+        slice_size = (len(data_set) * self.__config['TRAINING'].getint(
+                      'training_percent')) // 200
+        data_set = data_set[:slice_size] + data_set[-slice_size:]
+        self.__model = self.__classifier.train(
+            data_set, self.__config['TRAINING'])
+        self.__classifier.dump_model_to_file(
+            self.__config['TRAINING']['model_path'])
+        self.__classifier.dump_data_to_csv(
+            self.__config['TRAINING']['csv_data_path'])
+
+        return self.__model

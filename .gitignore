@@ -4,3 +4,5 @@ __pycache__/
 /jobhack.log
 /config.ini
 /driver/profile/
+/tmp
+/model

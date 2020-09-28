@@ -18,10 +18,10 @@ logging.basicConfig(
 
 engine = JobhackEngine(config, random_ua=False)
 
-# unlabeled_data = engine.scrap_site()
-# unlabeled_data = engine.retry_failed_pages()
-labeled_data = engine.auto_label_data()
-# model = engine.train_prediction_model(labeled_data)
+engine.scrap_site()
+engine.retry_failed_pages()
+engine.auto_label_data()
+model = engine.train_prediction_model()
 
 # url = input("Enter the URL of the page to score: ")
 # score = engine.predict_score(url, model)

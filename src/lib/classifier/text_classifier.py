@@ -9,29 +9,32 @@ from sklearn.linear_model import LogisticRegression
 
 
 class TextClassifier:
+
     def __init__(self):
         self.__stemmer = FrenchStemmer()
 
-    def train(self, data, options):
+    def train(self, data, options, preprocessed=False):
         logging.info(f'Training new model with {len(data)} examples...')
-        if options['preprocessed']:
+        if preprocessed:
             self.__training_data = data
         else:
             self.__training_data = self.preprocess_data_set(data)
 
         features, self.__vectorizer = self.__extract_features(
-            options['max_features'], options['min_df'], options['max_df'])
+            options.getint('max_features'),
+            options.getfloat('min_df'),
+            options.getfloat('max_df'))
         logging.info("Features extracted: " +
                      str(len(self.__vectorizer.get_feature_names())))
 
-        X = features.toarray()
-        y = self.__training_data['labels'].to_list()
-        y = [True if score > options['class_threshold'] else False
+        x = features.toarray()
+        y = self.__training_data['label'].to_list()
+        y = [True if score > options.getfloat('class_threshold') else False
              for score in y]
 
         self.__model = LogisticRegression()
         logging.info('Model fitting: ' + str(type(self.__model)))
-        self.__model.fit(X, y)
+        self.__model.fit(x, y)
         return self.__model
 
     def predict(self, text):
@@ -87,8 +90,7 @@ class TextClassifier:
         logging.info(f'Preprecessing data, {len(data)} examples...')
         preprocessed_data = []
         for row in data:
-            content = row['content'].decode("utf-8")
-            content = self.__preprocess_text_string(content)
+            content = self.__preprocess_text_string(row['content'])
             preprocessed_data.append({
                 'text': content,
                 'label': row['label']})
