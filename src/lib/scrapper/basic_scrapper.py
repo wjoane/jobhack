@@ -10,6 +10,7 @@ from langdetect import detect
 
 class BasicScrapper:
     def __init__(self, random_ua=False):
+        logging.getLogger("chardet.charsetprober").setLevel(logging.WARNING)
         logging.info('Initiating basic curl request agent')
         if random_ua:
             ua = UserAgent()

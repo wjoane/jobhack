@@ -2,7 +2,7 @@
 type     = mysql
 host     = localhost
 user     = jobhack
-password = **some**PW**
+password = secret
 database = jobhack
 
 [WEBSITE]
@@ -10,7 +10,7 @@ site_url             = https://www.tanitjobs.com/jobs/?page=<#>
 basic_mode           = yes
 relative_links       = no
 start_page           = 1
-max_pages            = 173
+max_pages            = 100
 language             = fr
 item_selector        = article.listing-item__jobs
 link_selector        = div.listing-item__title a
@@ -28,3 +28,12 @@ negative_weight    = 1.5
 bonus_for_hits     = 4
 max_l_divider      = 5
 min_l_fuzzy        = 5
+
+[TRAINING]
+model_path       = model/job_classification.model
+csv_data_path    = tmp/preprocessed_data.csv
+training_percent = 25
+max_features     = 1000
+min_df           = 0.05
+max_df           = 0.4
+class_threshold  = 0

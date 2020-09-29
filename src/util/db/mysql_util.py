@@ -54,18 +54,19 @@ class MysqlUtil:
                 mycursor.execute(sql, val)
                 if self.__auto_commit:
                     self.__mydb.commit()
+                yield page
             except Exception as e:
                 logging.error("Unable to commit INSERT SQL commands")
                 logging.error(str(e))
 
         mycursor.close()
 
-    @property
-    def load(self):
+    def load(self, code=None):
         logging.info('Loading data from database...')
         mycursor = self.__mydb.cursor(dictionary=True, buffered=True)
+        where = f'WHERE `code` = {code} ' if code else ''
         try:
-            sql = "SELECT * FROM `descriptions` ORDER BY `label`;"
+            sql = f"SELECT * FROM `descriptions` {where}ORDER BY `label`;"
             mycursor.execute(sql)
             row = mycursor.fetchone()
             while row:
@@ -90,27 +91,32 @@ class MysqlUtil:
                 mycursor.execute(sql, val)
                 if self.__auto_commit:
                     self.__mydb.commit()
+                yield page
             except Exception as e:
                 logging.error("Unable to commit UPDATE SQL commands")
                 logging.error(str(e))
 
         mycursor.close()
 
-    def update_by_url(self, content):
+    def update_by_url(self, content, min_code=None):
         mycursor = self.__mydb.cursor()
 
         for page in content:
-            logging.debug(
-                'Updating description content: ' + page['url'])
-            sql = "UPDATE `descriptions` SET `code` = %s, `content` = %s " \
-                  "WHERE `url` = %s;"
-            val = (page['code'], page['content'], page['url'])
-            try:
-                mycursor.execute(sql, val)
-                if self.__auto_commit:
-                    self.__mydb.commit()
-            except Exception as e:
-                logging.error("Unable to commit UPDATE SQL commands")
-                logging.error(str(e))
+            if min_code is None or page['code'] >= min_code:
+                logging.debug(
+                    'Updating description content: ' + page['url'])
+                sql = "UPDATE `descriptions` SET `code` = %s, `content` = %s " \
+                      "WHERE `url` = %s;"
+                val = (page['code'], page['content'], page['url'])
+                try:
+                    mycursor.execute(sql, val)
+                    if self.__auto_commit:
+                        self.__mydb.commit()
+                    yield page
+                except Exception as e:
+                    logging.error("Unable to commit UPDATE SQL commands")
+                    logging.error(str(e))
+            else:
+                yield page
 
         mycursor.close()

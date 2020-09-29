@@ -12,6 +12,7 @@ class TextClassifier:
 
     def __init__(self):
         self.__stemmer = FrenchStemmer()
+        self.is_trained = False
 
     def train(self, data, options, preprocessed=False):
         logging.info(f'Training new model with {len(data)} examples...')
@@ -35,7 +36,8 @@ class TextClassifier:
         self.__model = LogisticRegression()
         logging.info('Model fitting: ' + str(type(self.__model)))
         self.__model.fit(x, y)
-        return self.__model
+        self.is_trained = True
+        return self.__model, self.__vectorizer
 
     def predict(self, text):
         preprocessed_text = self.__preprocess_text_string(text)
@@ -73,6 +75,7 @@ class TextClassifier:
             loaded = pickle.load(file)
             self.__vectorizer = loaded['vectorizer']
             self.__model = loaded['model']
+        self.is_trained = True
         return self.__model, self.__vectorizer
 
     def dump_data_to_csv(self, path):
