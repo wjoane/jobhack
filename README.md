@@ -10,7 +10,7 @@ This library allows the training of a classification model based on text descrip
 
 ## Usage
 
-Just fill the program parameters in config.ini and run train.py to crawl through a website, train a model using the scraped and labeled data and save the pretrained model to a file. Run predict.py to get an evaluation of a job description page, after being prompted to enter the URL.
+Just fill the program parameters in config.ini and run `train.py` to crawl through a website, train a model using the scraped and labeled data and save the pretrained model to a file. Run `predict.py` to get an evaluation of a job description page, after being prompted to enter the URL.
 
 ## Config
 You can find an example of the config file in config.ini.example for the tanitjobs.com Website.
