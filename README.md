@@ -2,6 +2,12 @@
 
 This library allows the training of a classification model based on text descriptions of job offers sraped from a recruiting website and automatically labeled using a simple fuzzy keyword serach. You can than use the model to predict if a job description in a certain URL corresponds to the class of jobs you are looking for.
 
+## Installation
+* Clone this repository with: `git clone https://github.com/wjoane/jobhack.git`
+* Install pip requirements with: `pip install -r requiirements.txt`
+* Modify the settings in config.ini after: `cp config.ini.example config.ini`
+* Enjoy
+
 ## Usage
 
 Just fill the program parameters in config.ini and run train.py to crawl through a website, train a model using the scraped and labeled data and save the pretrained model to a file. Run predict.py to get an evaluation of a job description page, after being prompted to enter the URL.
