@@ -69,18 +69,20 @@ class JobhackEngine:
 
         self.__data_set = self.__scrap_failed_pages(data_set)
         if not unlabeled_data and self.__db is not None:
-            self.__data_set = self.__db.update_by_url(self.__data_set,
-                                                      min_code=300)
+            self.__data_set = self.__db.update_by_url(self.__data_set)
 
         return self.__data_set
 
     def __scrap_failed_pages(self, data_set):
         for page in data_set:
             if page['code'] >= 300:
-                yield self.__scrapper.parse_page_content(
+                new_page = self.__scrapper.parse_page_content(
                     page['url'], description_selector=self.__config[
                         'WEBSITE']['description_selector'])
+                new_page['update'] = True
+                yield new_page
             else:
+                page['update'] = False
                 yield page
 
     def auto_label_data(self, unlabeled_data=None):
@@ -135,5 +137,3 @@ class JobhackEngine:
         page['prediction'] = classifier.predict_proba(page['content'])
 
         return page
-
-

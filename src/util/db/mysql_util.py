@@ -98,11 +98,11 @@ class MysqlUtil:
 
         mycursor.close()
 
-    def update_by_url(self, content, min_code=None):
+    def update_by_url(self, content):
         mycursor = self.__mydb.cursor()
 
         for page in content:
-            if min_code is None or page['code'] >= min_code:
+            if page['update']:
                 logging.debug(
                     'Updating description content: ' + page['url'])
                 sql = "UPDATE `descriptions` SET `code` = %s, `content` = %s " \
